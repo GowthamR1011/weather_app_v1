@@ -1,4 +1,4 @@
-const OPENWEATHER_API_KEY = "d0df638241abba1614ad8d0512dd05c5"
+const OPENWEATHER_API_KEY = ""
 import { WeatherData } from "@/interface/weatherdata";
 
 
