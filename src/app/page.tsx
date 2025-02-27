@@ -1,22 +1,45 @@
-const OPENWEATHER_API_KEY = ""
+"use client";
+const DATA_FETCH_URL = "http://localhost:3000/api/weather/"
+
+import { useState,useEffect } from "react";
 import { WeatherData } from "@/interface/weatherdata";
 
 
 import Image from "next/image";
-export default async function Home() {
+export default function Home() {
 
   const latitude:number = 53.4808; 
   const longitude:number =  -2.1487;
+  const [weatherdata,SetWeatherData] = useState<WeatherData| any>();
+  const [errorMessage,SetErrorMessage] = useState<boolean>(false);
+  const [isLoading,SetIsLoading] = useState<boolean>(true);
 
-  const weatherdata:WeatherData = await fetch(`https://api.openweathermap.org/data/2.5/weather?appid=${OPENWEATHER_API_KEY}&lon=${longitude}&lat=${latitude}`,{
-                                      cache:"no-store"
-                                    })
-                            .then(res => res.json());
+  useEffect(()=>{
+    fetch(DATA_FETCH_URL+`${latitude}/${longitude}`)
+    .then(res => res.json())
+    .then((data)=>{
+      if(data.cod==404){
+        SetErrorMessage(true);
+      }
+      else{
+      SetWeatherData(data);
+    }
+    SetIsLoading(false);
+    })
+  },[]);
+
+  
     
   function kelvintoCelcius(temp:number):number{
     return Math.round(temp - 273.15);
   }
+
+  if(isLoading)return<div className="h-screen flex items-center justify-center font-mono"><span>Loading........</span></div>
+  if(errorMessage)return<div className="h-screen flex items-center justify-center font-mono"><span>We are facing some technical difficulties right now </span></div>
+  
   return (
+    
+  
     <div className="h-screen flex items-center justify-center">
       <div className="grid font-mono">
         
@@ -24,9 +47,9 @@ export default async function Home() {
           <Image 
             src={`https://openweathermap.org/img/wn/${weatherdata.weather[0].icon}@2x.png`} 
             alt={weatherdata.weather[0].description}
-            height={20}
-            width={20}
-            layout="responsive"/>
+            height={100}
+            width={100}
+            />
         </div>
         <div className="temperature flex justify-center items-center">
           <p className="text-8xl">{kelvintoCelcius(weatherdata.main.temp)}°C</p>
