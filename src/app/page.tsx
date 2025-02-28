@@ -7,23 +7,29 @@ import Image from "next/image";
 
 export default function Home() {
 
-  let lat:number = 51.509865; // Default to London in case no city provided.
-  let lon:number =  -0.118092;
+
   const [weatherdata,SetWeatherData] = useState<WeatherData| any>();
   const [errorMessage,SetErrorMessage] = useState<boolean>(false);
   const [isLoading,SetIsLoading] = useState<boolean>(true);
+  const [isLocationGranted,SetIsLocationGranted] = useState<boolean>(false);
+  const [darkMode,setIsDarkMode] = useState<boolean>(true);
+
 
   function getLocation(){
     if('geolocation' in navigator)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
+        SetIsLocationGranted(true);
         const { latitude, longitude } = coords;
-        lat = latitude;
-        lon = longitude;   
+        fetchData(latitude,longitude);
     })
-    fetchData();
+    else{
+      SetIsLocationGranted(false);
+    }
   }
 
-  function fetchData(){
+
+  
+  function fetchData(lat:number,lon:number){
     fetch(DATA_FETCH_URL+`${lat}/${lon}`)
     .then(res => res.json())
     .then((data)=>{
@@ -32,6 +38,9 @@ export default function Home() {
       }
       else{
       SetWeatherData(data);
+      if(data.sys.sunset < data.dt){
+        setIsDarkMode(true);
+      }
     }
     SetIsLoading(false);
     })
@@ -41,7 +50,7 @@ export default function Home() {
     getLocation();
     const interval = setInterval(() => {
       getLocation();
-    },60*1000);
+    },10*60*1000);
   return () => clearInterval(interval)
   },[]);
 
@@ -50,12 +59,13 @@ export default function Home() {
   function kelvintoCelcius(temp:number):number{
     return Math.round(temp - 273.15);
   }
-
+  if(!isLocationGranted) return <div className="h-screen flex items-center justify-center font-mono">Grant Location Permision to fetch Weather......</div>
   if(isLoading)return<div className="h-screen flex items-center justify-center font-mono"><span>Loading........</span></div>
   if(errorMessage)return<div className="h-screen flex items-center justify-center font-mono"><span>We are facing some technical difficulties right now </span></div>
   
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className={`${darkMode && "dark"}`}>
+      <div className="bg-neutral-100 dark:bg-neutral-900 h-screen flex items-center justify-center">
       <div className="grid font-mono">
         
         <div className="weatherIcon flex justify-center items-center">
@@ -67,15 +77,16 @@ export default function Home() {
             />
         </div>
         <div className="temperature flex justify-center items-center">
-          <p className="text-8xl">{kelvintoCelcius(weatherdata.main.temp)}°C</p>
+          <p className="text-8xl text-neutal-900 dark:text-neutral-100">{kelvintoCelcius(weatherdata.main.temp)}°C</p>
         </div>
         <div className="feels-like flex justify-center items-center">
-          <p className="text-sm/8">Feels Like: {kelvintoCelcius(weatherdata.main.feels_like)}°C</p>
+          <p className="text-sm/8 text-neutal-900 dark:text-neutral-100">Feels Like: {kelvintoCelcius(weatherdata.main.feels_like)}°C</p>
         </div>
         <div className="location flex justify-center items-center">
-          <p>{weatherdata.name}</p>
+        <p className="text-neutal-900 dark:text-neutral-100">{weatherdata.name}</p>
         </div>
       </div>
-    </div>
+      </div>
+  </div>
   );
 }
