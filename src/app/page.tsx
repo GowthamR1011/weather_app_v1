@@ -3,19 +3,28 @@ const DATA_FETCH_URL = "http://localhost:3000/api/weather/"
 
 import { useState,useEffect } from "react";
 import { WeatherData } from "@/interface/weatherdata";
-
-
 import Image from "next/image";
+
 export default function Home() {
 
-  const latitude:number = 53.4808; 
-  const longitude:number =  -2.1487;
+  let lat:number = 51.509865; // Default to London in case no city provided.
+  let lon:number =  -0.118092;
   const [weatherdata,SetWeatherData] = useState<WeatherData| any>();
   const [errorMessage,SetErrorMessage] = useState<boolean>(false);
   const [isLoading,SetIsLoading] = useState<boolean>(true);
 
-  useEffect(()=>{
-    fetch(DATA_FETCH_URL+`${latitude}/${longitude}`)
+  function getLocation(){
+    if('geolocation' in navigator)
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        const { latitude, longitude } = coords;
+        lat = latitude;
+        lon = longitude;   
+    })
+    fetchData();
+  }
+
+  function fetchData(){
+    fetch(DATA_FETCH_URL+`${lat}/${lon}`)
     .then(res => res.json())
     .then((data)=>{
       if(data.cod==404){
@@ -26,9 +35,17 @@ export default function Home() {
     }
     SetIsLoading(false);
     })
+  }
+  
+  useEffect(()=>{
+    getLocation();
+    const interval = setInterval(() => {
+      getLocation();
+    },60*1000);
+  return () => clearInterval(interval)
   },[]);
 
-  
+
     
   function kelvintoCelcius(temp:number):number{
     return Math.round(temp - 273.15);
@@ -38,8 +55,6 @@ export default function Home() {
   if(errorMessage)return<div className="h-screen flex items-center justify-center font-mono"><span>We are facing some technical difficulties right now </span></div>
   
   return (
-    
-  
     <div className="h-screen flex items-center justify-center">
       <div className="grid font-mono">
         
