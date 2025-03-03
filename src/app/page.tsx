@@ -15,12 +15,13 @@ export default function Home() {
   const [isLoading,SetIsLoading] = useState<boolean>(true);
   const [isLocationGranted,SetIsLocationGranted] = useState<boolean>(false);
   const [darkMode,setIsDarkMode] = useState<boolean>(false);
-
+  const [standardMetrics,setStandardMetrics] = useState<boolean>(true);
 
   function getLocation(){
     if('geolocation' in navigator)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
         SetIsLocationGranted(true);
+        SetIsLoading(true);
         const { latitude, longitude } = coords;
         fetchData(latitude,longitude);
     })
@@ -58,8 +59,10 @@ export default function Home() {
 
 
     
-  function kelvintoCelcius(temp:number):number{
-    return Math.round(temp - 273.15);
+  function changeMetrics(temp:number):number{
+    if(standardMetrics)
+      return Math.round(temp - 273.15);
+    return Math.round((temp-273.15) * (9/5) + 32);
   }
   if(!isLocationGranted) return <div className="h-screen flex items-center justify-center font-mono">Grant Location Permision to fetch Weather......</div>
   if(isLoading)return<div className="h-screen flex items-center justify-center font-mono"><span>Loading........</span></div>
@@ -68,7 +71,8 @@ export default function Home() {
   return (
     <div className={`${darkMode && "dark"}`}>
       <div className="absolute top-5 right-5 bg-neutral-120 text-black flex justify-end dark:bg-neutral-900 dark:text-white">
-        <button onClick={()=>{setIsDarkMode(!darkMode)}}>{darkMode?<MdOutlineWbSunny size={24}/>:<MdDarkMode size={24}/>}</button>
+        <button className="p-2" onClick={()=>{setStandardMetrics(!standardMetrics)}}>{standardMetrics?<>°F</>:<>°C</>}</button>
+        <button className="p-2" onClick={()=>{setIsDarkMode(!darkMode)}}>{darkMode?<MdOutlineWbSunny size={24}/>:<MdDarkMode size={24}/>}</button>
       </div>
       <div className="bg-neutral-120 dark:bg-neutral-900 h-screen flex items-center justify-center">
       <div className="grid font-mono">
@@ -82,10 +86,10 @@ export default function Home() {
             />
         </div>
         <div className="temperature flex justify-center items-center">
-          <p className="text-8xl text-neutal-900 dark:text-neutral-100">{kelvintoCelcius(weatherdata.main.temp)}°C</p>
+          <p className="text-8xl text-neutal-900 dark:text-neutral-100">{changeMetrics(weatherdata.main.temp)}{standardMetrics?<>°C</>:<>°F</>}</p>
         </div>
         <div className="feels-like flex justify-center items-center">
-          <p className="text-sm/8 text-neutal-900 dark:text-neutral-100">Feels Like: {kelvintoCelcius(weatherdata.main.feels_like)}°C</p>
+          <p className="text-sm/8 text-neutal-900 dark:text-neutral-100">Feels Like: {changeMetrics(weatherdata.main.feels_like)}{standardMetrics?<>°C</>:<>°F</>}</p>
         </div>
         <div className="location flex justify-center items-center">
           <p className="text-neutal-900 dark:text-neutral-100">{weatherdata.name}</p>
