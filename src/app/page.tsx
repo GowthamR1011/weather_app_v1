@@ -3,6 +3,7 @@ const DATA_FETCH_URL = "/api/weather/";
 
 import { useState,useEffect } from "react";
 import { WeatherData } from "@/interface/weatherdata";
+import { HamburgerMenu } from "@/component/Hamburger";
 import Image from "next/image";
 
 
@@ -68,7 +69,9 @@ export default function Home() {
   if(weatherdata)
   return (
     <div className={`${darkMode && "dark"}`}>
-
+      <div className="bg-neutral-200 dark:bg-neutral-900 flex justify-end">
+        <HamburgerMenu />
+      </div>
       <div className="bg-neutral-200 dark:bg-neutral-900 h-screen flex items-center justify-center">
       <div className="grid font-mono">
         
