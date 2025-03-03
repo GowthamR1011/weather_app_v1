@@ -3,7 +3,7 @@ const DATA_FETCH_URL = "/api/weather/";
 
 import { useState,useEffect } from "react";
 import { WeatherData } from "@/interface/weatherdata";
-import { HamburgerMenu } from "@/component/Hamburger";
+import { MdDarkMode,MdOutlineWbSunny } from "react-icons/md";
 import Image from "next/image";
 
 
@@ -21,6 +21,7 @@ export default function Home() {
     if('geolocation' in navigator)
       navigator.geolocation.getCurrentPosition(({ coords }) => {
         SetIsLocationGranted(true);
+        SetIsLoading(true);
         const { latitude, longitude } = coords;
         fetchData(latitude,longitude);
     })
@@ -69,8 +70,8 @@ export default function Home() {
   if(weatherdata)
   return (
     <div className={`${darkMode && "dark"}`}>
-      <div className="bg-neutral-200 dark:bg-neutral-900 flex justify-end">
-        <HamburgerMenu />
+      <div className="absolute top-5 right-5 bg-neutral-200 text-black flex justify-end dark:bg-neutral-900 dark:text-white">
+        <button onClick={()=>{setIsDarkMode(!darkMode)}}>{darkMode?<MdOutlineWbSunny size={24}/>:<MdDarkMode size={24}/>}</button>
       </div>
       <div className="bg-neutral-200 dark:bg-neutral-900 h-screen flex items-center justify-center">
       <div className="grid font-mono">
