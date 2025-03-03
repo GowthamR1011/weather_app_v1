@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import Head from "next/head";
-
+import { AppWrapper } from "@/contexts";
 export const metadata: Metadata = {
   title: "Weather",
   description: " A minimalistic Weather APP, that displays the weather of your current location.",
@@ -15,11 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <Head>
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    </Head>
       <body>
-        {children}
+        <AppWrapper>
+          {children}
+        </AppWrapper>
         <Analytics />
       </body>
     </html>
