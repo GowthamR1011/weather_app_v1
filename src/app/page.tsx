@@ -5,10 +5,11 @@ import { useState,useEffect } from "react";
 import { WeatherData } from "@/interface/weatherdata";
 import Image from "next/image";
 
+
 export default function Home() {
 
 
-  const [weatherdata,SetWeatherData] = useState<WeatherData| any>();
+  const [weatherdata,SetWeatherData] = useState<WeatherData>();
   const [errorMessage,SetErrorMessage] = useState<boolean>(false);
   const [isLoading,SetIsLoading] = useState<boolean>(true);
   const [isLocationGranted,SetIsLocationGranted] = useState<boolean>(false);
@@ -52,7 +53,7 @@ export default function Home() {
       getLocation();
     },10*60*1000);
   return () => clearInterval(interval)
-  },[]);
+  });
 
 
     
@@ -62,7 +63,7 @@ export default function Home() {
   if(!isLocationGranted) return <div className="h-screen flex items-center justify-center font-mono">Grant Location Permision to fetch Weather......</div>
   if(isLoading)return<div className="h-screen flex items-center justify-center font-mono"><span>Loading........</span></div>
   if(errorMessage)return<div className="h-screen flex items-center justify-center font-mono"><span>We are facing some technical difficulties right now </span></div>
-  
+  if(weatherdata)
   return (
     <div className={`${darkMode && "dark"}`}>
       <div className="bg-neutral-100 dark:bg-neutral-900 h-screen flex items-center justify-center">

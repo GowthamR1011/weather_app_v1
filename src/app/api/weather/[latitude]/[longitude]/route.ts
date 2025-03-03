@@ -2,8 +2,15 @@ import { NextResponse } from "next/server";
 import { WeatherData } from "@/interface/weatherdata";
 import { ErrorMessage } from "@/interface/errormessage";
 
+type Context = {
+   params: Promise<{
+    latitude:number,
+    longitude:number
+   }>
+}
 
-export async function GET(request:Request, {params}: any) {
+export async function GET(request:Request, context:Context ) {
+    const {params} = await context;
   
   const {longitude,latitude } = await params;
 
