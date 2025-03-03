@@ -37,5 +37,4 @@ A minimalistic Approach
 <img width="1146" alt="image" src="https://github.com/user-attachments/assets/eb97c804-48fe-45c0-bd85-cad9a4070c7c" />
 
 
-Lookout for another repository with version 2 of the weather app which will include full stack developement using NextJs
 
