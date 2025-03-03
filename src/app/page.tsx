@@ -40,8 +40,6 @@ export default function Home() {
       else{
       SetWeatherData(data);
       if(data.sys.sunset < data.dt){
-        console.log(data.sys.sunset);
-        console.log(data.dt);
         setIsDarkMode(true);
       }
     }
