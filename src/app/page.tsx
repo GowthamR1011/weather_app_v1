@@ -13,7 +13,7 @@ export default function Home() {
   const [errorMessage,SetErrorMessage] = useState<boolean>(false);
   const [isLoading,SetIsLoading] = useState<boolean>(true);
   const [isLocationGranted,SetIsLocationGranted] = useState<boolean>(false);
-  const [darkMode,setIsDarkMode] = useState<boolean>(true);
+  const [darkMode,setIsDarkMode] = useState<boolean>(false);
 
 
   function getLocation(){
@@ -40,6 +40,8 @@ export default function Home() {
       else{
       SetWeatherData(data);
       if(data.sys.sunset < data.dt){
+        console.log(data.sys.sunset);
+        console.log(data.dt);
         setIsDarkMode(true);
       }
     }
@@ -53,7 +55,7 @@ export default function Home() {
       getLocation();
     },10*60*1000);
   return () => clearInterval(interval)
-  });
+  },[]);
 
 
     
