@@ -1,5 +1,5 @@
 "use client";
-const DATA_FETCH_URL = "http://localhost:3000/api/weather/"
+const DATA_FETCH_URL = "/api/weather/";
 
 import { useState,useEffect } from "react";
 import { WeatherData } from "@/interface/weatherdata";
@@ -68,7 +68,8 @@ export default function Home() {
   if(weatherdata)
   return (
     <div className={`${darkMode && "dark"}`}>
-      <div className="bg-neutral-100 dark:bg-neutral-900 h-screen flex items-center justify-center">
+
+      <div className="bg-neutral-200 dark:bg-neutral-900 h-screen flex items-center justify-center">
       <div className="grid font-mono">
         
         <div className="weatherIcon flex justify-center items-center">
@@ -86,7 +87,7 @@ export default function Home() {
           <p className="text-sm/8 text-neutal-900 dark:text-neutral-100">Feels Like: {kelvintoCelcius(weatherdata.main.feels_like)}°C</p>
         </div>
         <div className="location flex justify-center items-center">
-        <p className="text-neutal-900 dark:text-neutral-100">{weatherdata.name}</p>
+          <p className="text-neutal-900 dark:text-neutral-100">{weatherdata.name}</p>
         </div>
       </div>
       </div>
