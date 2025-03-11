@@ -4,26 +4,27 @@ import { ErrorMessage } from "@/interface/errormessage";
 
 type Context = {
    params: Promise<{
-    latitude:number,
-    longitude:number
+    city:string
    }>
 }
 
 export async function GET(request:Request, context:Context ) {
-    const {params} = await context;
+    const {params} = context;
   
-  const {longitude,latitude } = await params;
+  const {city} = await params;
 
-const weatherdata:WeatherData | ErrorMessage  = await fetch(`https://api.openweathermap.org/data/2.5/weather?appid=${process.env.OPENWEATHER_API_KEY}&lon=${longitude}&lat=${latitude}`,
+const weatherdata:WeatherData | ErrorMessage  = await fetch(`https://api.openweathermap.org/data/2.5/weather?appid=${process.env.OPENWEATHER_API_KEY}&q=${city}`,
                                                 {
                                                     cache:"no-store"
                                                 })
                             .then(async (res) => {
                                 const jsonData =  await res.json();
                                 if(jsonData.cod == 401){
-                                    console.log(jsonData);
-                                    return {cod:404,message:"Unable to Fetch Data"};
+     
+                                    return {cod:500,message:"Unable to Fetch Data"};
                                 }
+                                if(jsonData.cod == 404)
+                                    return {cod:404, message:"City Not found"}
                                 return jsonData;
                             }
                             )
