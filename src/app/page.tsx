@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { WeatherData } from "@/interface/weatherdata";
 import Image from "next/image";
 import { MdDarkMode, MdOutlineWbSunny } from "react-icons/md";
+import EventEmitter from "events";
 
 
 export default function Home() {
@@ -36,6 +37,11 @@ export default function Home() {
 		return Math.round((temp-273.15) * (9/5) + 32);
 	}
 
+	function changeCity(e:React.ChangeEvent<HTMLFormElement>){
+		e.preventDefault();
+		fetchCityWeather();
+		setCity("");
+	}
 	useEffect(()=>{
 		fetchCityWeather();
 	},[])
@@ -58,7 +64,7 @@ export default function Home() {
 		return(
 		<div>
 			<div className="flex justify-center mt-1">
-				<form onSubmit={(e) => {e.preventDefault();fetchCityWeather()}}>
+				<form onSubmit={changeCity}>
 					<input 
 						type="text"
 						placeholder="Search City"
@@ -84,9 +90,10 @@ export default function Home() {
 				{/* App Title  */}
 			</div>
 			<div className="flex justify-center">
-				<form onSubmit={(e) => {e.preventDefault();fetchCityWeather()}}>
+				<form onSubmit={changeCity}>
 					<input 
 						type="text"
+						value={city}
 						placeholder="Search City"
 						onChange={(e) => {setCity(e.target.value)}}
 						className="text-black bg-neutral-120 dark:bg-neutral-900 dark:text-white rounded-2xl pl-2 p-1"
