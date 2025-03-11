@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { WeatherData } from "@/interface/weatherdata";
 import Image from "next/image";
 import { MdDarkMode, MdOutlineWbSunny } from "react-icons/md";
-import EventEmitter from "events";
 
 
 export default function Home() {
