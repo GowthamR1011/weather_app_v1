@@ -42,7 +42,7 @@ export default function Home() {
 	}
 	
 	useEffect(()=>{
-		let cookieValue:string|undefined = document.cookie
+		const cookieValue:string|undefined = document.cookie
 							.split("; ")
 							.find((row) => row.startsWith("City="))
 							?.split("=")[1];
