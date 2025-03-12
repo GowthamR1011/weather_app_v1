@@ -7,10 +7,9 @@ import { WeatherData } from "@/interface/weatherdata";
 import Image from "next/image";
 import { MdDarkMode, MdOutlineWbSunny } from "react-icons/md";
 
-
 export default function Home() {
 
-	const [city,setCity] = useState<string>("Manchester");
+	const [city,setCity] = useState<string>("");
   	const [weatherdata,setWeatherData] = useState<WeatherData>();
   	const [errorCode,setErrorCode] = useState<number>(200);
   	const [isLoading,setIsLoading] = useState<boolean>(false);
@@ -18,9 +17,9 @@ export default function Home() {
   	const [standardMetrics,setStandardMetrics] = useState<boolean>(true);
 
  
-	function fetchCityWeather(){
+	function fetchCityWeather(c:string){
 		setIsLoading(true);
-		fetch(DATA_FETCH_URL + city)
+		fetch(DATA_FETCH_URL + c)
 			.then(res => res.json())
 			.then(data =>{
 					setErrorCode(data.cod);			
@@ -38,11 +37,26 @@ export default function Home() {
 
 	function changeCity(e:React.ChangeEvent<HTMLFormElement>){
 		e.preventDefault();
-		fetchCityWeather();
+		fetchCityWeather(city);
 		setCity("");
 	}
+	
 	useEffect(()=>{
-		fetchCityWeather();
+		let cookieValue:string|undefined = document.cookie
+							.split("; ")
+							.find((row) => row.startsWith("City="))
+							?.split("=")[1];
+		
+		if(cookieValue !== undefined){
+			fetchCityWeather(cookieValue);
+			setCity(cookieValue);
+		}
+		else{
+			fetchCityWeather("Manchester");
+			setCity("Manchester");
+		}
+		
+		
 	},[])
 
 	if(isLoading)
