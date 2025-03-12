@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { WeatherData } from "@/interface/weatherdata";
 import { ErrorMessage } from "@/interface/errormessage";
-import { cookies } from "next/headers";
 
 type Context = {
    params: Promise<{
