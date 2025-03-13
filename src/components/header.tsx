@@ -8,11 +8,11 @@ export interface IHeaderProps {
     setCity:React.Dispatch<React.SetStateAction<string>>,
     setStandardMetrics:React.Dispatch<React.SetStateAction<boolean>>,
     standardMetrics:boolean,
-    setIsDarkMode:React.Dispatch<React.SetStateAction<boolean>>,
+    changeTheme:() => void,
     darkMode:boolean
 }
 
-export default function Header ({changeCity,city,setCity,setIsDarkMode,setStandardMetrics,darkMode,standardMetrics}: IHeaderProps) {
+export default function Header ({changeCity,city,setCity,changeTheme,setStandardMetrics,darkMode,standardMetrics}: IHeaderProps) {
   return (
         <div className="p-4 w-full bg-neutral-120 text-black  dark:bg-neutral-900 dark:text-white  grid grid-cols-3 ">
             <div>
@@ -31,7 +31,7 @@ export default function Header ({changeCity,city,setCity,setIsDarkMode,setStanda
             </div>
             <div className="flex justify-end">
                 <button className="px-2" onClick={()=>{setStandardMetrics(!standardMetrics)}}>{standardMetrics?<>°F</>:<>°C</>}</button>
-                <button className="px-2" onClick={()=>{setIsDarkMode(!darkMode)}}>{darkMode?<MdOutlineWbSunny size={24}/>:<MdDarkMode size={24}/>}</button>
+                <button className="px-2" onClick={changeTheme}>{darkMode?<MdOutlineWbSunny size={24}/>:<MdDarkMode size={24}/>}</button>
             </div>
         </div>
   );

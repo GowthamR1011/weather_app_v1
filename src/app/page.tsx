@@ -18,6 +18,14 @@ export default function Home() {
   	const [darkMode,setIsDarkMode] = useState<boolean>(false);
   	const [standardMetrics,setStandardMetrics] = useState<boolean>(true);
 
+	function changeTheme():void{
+		if(darkMode)
+			document.cookie = "theme=false; path=/;";
+		else
+			document.cookie = "theme=true; path=/;"
+
+		setIsDarkMode(!darkMode);
+	}
  
 	function fetchCityWeather(c:string){
 		setIsLoading(true);
@@ -47,13 +55,20 @@ export default function Home() {
 	}
 	
 	useEffect(()=>{
-		const cookieValue:string|undefined = document.cookie
+		const themeCookieValue: string|undefined = document.cookie
+														.split("; ")
+														.find((row) => row.startsWith("theme="))
+														?.split("=")[1];
+		if(themeCookieValue)
+			setIsDarkMode(themeCookieValue === "true");
+													
+		const citycookieValue:string|undefined = document.cookie
 							.split("; ")
 							.find((row) => row.startsWith("City="))
 							?.split("=")[1];
 		
-		if(cookieValue)
-			fetchCityWeather(cookieValue);
+		if(citycookieValue)
+			fetchCityWeather(citycookieValue);
 		else
 			fetchCityWeather("Manchester"); 
 	},[]);
@@ -68,7 +83,7 @@ export default function Home() {
 				changeCity={changeCity}
 				setCity={setCity}
 				city={city}
-				setIsDarkMode={setIsDarkMode}
+				changeTheme={changeTheme}
 				setStandardMetrics={setStandardMetrics}
 				darkMode={darkMode}
 				standardMetrics={standardMetrics}
