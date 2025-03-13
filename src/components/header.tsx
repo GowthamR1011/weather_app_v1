@@ -5,11 +5,11 @@ import { MdDarkMode, MdOutlineWbSunny } from "react-icons/md";
 export interface IHeaderProps {
     changeCity:React.FormEventHandler<HTMLFormElement>,
     city:string,
-    setCity:Function,
-    setStandardMetrics:Function,
+    setCity:React.Dispatch<React.SetStateAction<string>>,
+    setStandardMetrics:React.Dispatch<React.SetStateAction<boolean>>,
     standardMetrics:boolean,
-    setIsDarkMode:Function,
-    darkMode:Boolean
+    setIsDarkMode:React.Dispatch<React.SetStateAction<boolean>>,
+    darkMode:boolean
 }
 
 export default function Header ({changeCity,city,setCity,setIsDarkMode,setStandardMetrics,darkMode,standardMetrics}: IHeaderProps) {

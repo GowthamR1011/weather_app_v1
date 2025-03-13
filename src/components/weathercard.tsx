@@ -1,12 +1,11 @@
-import * as React from 'react';
 import Image from 'next/image';
 
 
 import  { type WeatherData } from '@/interface/weatherdata';
 export interface IWeatherCardProps {
     weatherdata: WeatherData,
-    changeMetrics: Function,
-    standardMetrics:Boolean
+    changeMetrics: (temp:number) => number,
+    standardMetrics:boolean
 }
 
 export function WeatherCard ({weatherdata,changeMetrics,standardMetrics}: IWeatherCardProps ) {
