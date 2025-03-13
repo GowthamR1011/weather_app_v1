@@ -21,13 +21,14 @@ export default function Home() {
  
 	function fetchCityWeather(c:string){
 		setIsLoading(true);
-		setWeatherData(undefined);
 		fetch(DATA_FETCH_URL + c)
 			.then(res => res.json())
 			.then(data =>{
 					setErrorCode(data.cod);	
 					if(data.cod == 200)		
 						setWeatherData(data);
+					else
+						setWeatherData(undefined);
 			});
 
 		setIsLoading(false);
@@ -55,9 +56,9 @@ export default function Home() {
 			fetchCityWeather(cookieValue);
 		else
 			fetchCityWeather("Manchester"); 
-		
 	},[]);
 
+	
 
 	return (
 		<div className={`flex h-screen flex-col ${darkMode && "dark"}`}>
