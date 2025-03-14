@@ -14,7 +14,7 @@ type Measurements = {
     temp:number,
     feels_like:number,
     temp_min:number,
-    temp_map:number,
+    temp_max:number,
     pressure:number,
     humidity:number,
     sea_level:number,
