@@ -1,7 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --background-light: #ffffff;
+    --background-dark: #171717;
+    --text-light: #171717;
+    --text-dark: #fafafa;
+    --card-bg-light: rgba(226, 232, 240, 0.7);
+    --card-bg-dark: rgba(71, 85, 105, 0.8);
+}
+
 * {
-    @apply transition-colors duration-200;
+    @apply transition-colors duration-150;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: var(--background-light);
+    color: var(--text-light);
+}
+
+.dark body {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
 }
